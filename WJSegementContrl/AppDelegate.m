@@ -30,7 +30,7 @@
     
     wjMainViewController* mainView = [wjMainViewController wjSegemtnContrl];
     mainView.scroSpeed = 0.1;  //滑块移动的速度  默认为 0.3
-    mainView.sliderType = sliderRect;  //设置滑块属性
+    mainView.sliderType = sliderDefault;  //设置滑块属性
     UINavigationController* nav = [[UINavigationController alloc] initWithRootViewController:mainView];
     nav.navigationBar.translucent = NO;
     

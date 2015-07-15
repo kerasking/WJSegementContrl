@@ -131,31 +131,47 @@
     [self.segementView addSubview:btn];
     [self.btnArray addObject:btn];
     [self updateBtns];
-    }
+}
 
 -(void) clcikeBtn:(UIButton*) sender
 {
     [UIView animateWithDuration:0.2 animations:^{
         self.containView.contentOffset = CGPointMake(sender.tag*self.view.width, 0);
     }];
-    [self changeBtn:sender];
+    [self changeBtn:sender withAnimation:YES];
 }
 
--(void) changeBtn:(UIButton*) btn
+-(void) changeBtn:(UIButton*) btn withAnimation:(BOOL) animation
 {
-    [UIView   animateWithDuration:2 animations:^{
-        tempBtn.titleLabel.font = [UIFont systemFontOfSize:15.0F];
+    if (animation) {
+        [UIView animateWithDuration:0.5 animations:^{
+            
+            //把前一个btn 的动画效果去掉
+            tempBtn.transform = CGAffineTransformIdentity;
+            //设置前一个btn的未选中
+            tempBtn.selected = NO;
+            //设置当前选中按钮选中
+            btn.selected = YES;
+            //为当前按钮添加动画效果
+            btn.transform = CGAffineTransformScale(btn.transform, 1.2, 1.2);
+            //交换按钮
+            tempBtn = btn;
+        }];
+    }
+    else
+    {
+        tempBtn.transform = CGAffineTransformIdentity;
+        
         tempBtn.selected = NO;
         btn.selected = YES;
+        btn.transform = CGAffineTransformScale(btn.transform, 1.2, 1.2);
+        
         tempBtn = btn;
-        btn.titleLabel.font = [UIFont systemFontOfSize:24.0F];
-    }];
-    
-   
-    
-    
+    }
     
 }
+
+
 
 -(void) updateBtns
 {
@@ -164,18 +180,28 @@
     CGFloat btnH = 30;
     CGFloat btnX ;
     CGFloat btnY = 0;
+    //添加滑块
+    self.slider.width = btnW;
+    [self.segementView addSubview:self.slider];
     
     for (int i = 0; i < self.btnArray.count; i++) {
         UIButton* btn = self.btnArray[i];
         btnX = i * btnW;
         btn.tag = i;
-        if (btn.tag == 0) {
-            [self clcikeBtn:btn];
-            self.slider.width = btnW;
-            [self.segementView addSubview:self.slider];
-        }
+    if (btn.tag == 0) {
+        //设置选中状态
+        btn.selected = YES;
+        //先移除以前的动画
+        btn.transform = CGAffineTransformIdentity;
+        //在添加新的frame
+        [btn setFrame:CGRectMake(btnX, btnY, btnW, btnH)];
+        //在进行新的动画
+        btn.transform = CGAffineTransformScale(btn.transform, 1.2, 1.2);
+    }
+    else{
         [btn setFrame:CGRectMake(btnX, btnY, btnW, btnH)];
     }
+  }
 }
 
 -(void) scrollViewDidScroll:(UIScrollView *)scrollView
@@ -194,9 +220,8 @@
       i =ceil(distancen - 0.5);
   }
     beforeX = scrollView.contentOffset.x;
-
     UIButton* btn = self.btnArray[i];
-    [self changeBtn:btn];
+    [self changeBtn:btn withAnimation:YES];
 }
 
 -(void)  sliderMove:(CGFloat) distance
@@ -215,6 +240,7 @@
 }
 
 - (void)viewDidLoad {
+   
     [self originData];
     [self.view addSubview:self.segementView];
     [super viewDidLoad];
