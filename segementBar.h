@@ -7,7 +7,16 @@
 //
 
 #import <UIKit/UIKit.h>
+@protocol wjSegementDelegate <NSObject>
 
-@interface segementBar : UIView
+-(void) clickBtnAtTag:(NSInteger) tag;
 
+@end
+@interface segementBar : UIScrollView
+@property(strong,nonatomic) NSMutableArray* btnArray;
+@property(assign,nonatomic) id<wjSegementDelegate> customeDelegate;
+-(void)  sliderMove:(CGFloat) distance;
++(instancetype) bar;
+-(void) addBtn:(NSString*) titile;
+-(void) moveToButtonAtIndex:(NSInteger)index;
 @end

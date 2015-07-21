@@ -9,5 +9,5 @@
 #import <UIKit/UIKit.h>
 
 @interface segementButton : UIButton
-
++(instancetype) button;
 @end
